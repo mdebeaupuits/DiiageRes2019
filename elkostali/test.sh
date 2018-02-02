@@ -7,3 +7,4 @@ echo "Longueur = " ${#str}
 #echo ${str2}
 
 echo ${str} | tr ":" "\n"
+#test
