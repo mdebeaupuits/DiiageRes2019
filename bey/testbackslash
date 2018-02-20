@@ -1,0 +1,3 @@
+#!/bin/bash
+mavar="ABC"
+echo "\${mavar}=\"${mavar}\""
