@@ -1,0 +1,19 @@
+#!/bin/sh
+#dsk.sh
+#Description: Surveillance des disques
+#Auteur: Pierre FORZINETTI
+
+#on inverse la selection avec-v pour ne pas prendre en charge les en tete. on garde uniquement la colone 5 et 1
+df -H | grep -vE '^Filesystem|tmpfs|cdrom' | awk '{ print $5 " " $1 }' | while read sortie;
+do
+  #On recupere l enssemble dans $sortie
+  echo $sortie
+  #On retire le "%" et on ne prend que la nombre pour la variable partUtil
+  partUtil=$(echo $sortie| awk '{ print $1}' | cut -d'%' -f1  )
+  #On stock le nom de la seconde colone
+  partNom=$(echo $sortie| awk '{ print $2 }' )
+  #on verifie la valeur
+  if [ $partUtil -ge 90 ]; then
+    echo "Plus d espace sur " $(partNom)
+  fi
+done
