@@ -7,7 +7,9 @@
 espaceDisque=$(df -h | grep /dev/sda1 | awk {'print $5'} | sed 's/%//g')
 
 #Maintenant on va vérifier la valeur du seuil. Si ce dernier est supérieur
-#à 80%, alors on va afficher un message d'erreur.
+#à 80%, alors on va afficher un message d'avertissement.
+#Si l'espace disque occupé est en dessous du seuil, on va simplement afficher
+#un message d'information:
 
 if [[ $espaceDisque -gt 80 ]]
 then
