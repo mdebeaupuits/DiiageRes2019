@@ -20,7 +20,7 @@ function edit(){
 }
 
 function remove(){
-	sed -i "/hostname=$hostname/d" srvs
+	sed -i "/hostname=$hostname/d" $filename
 }
 
 
@@ -43,7 +43,7 @@ then
 		add
 	fi
 fi
-if [ $1 = "remove" ]
+if [ $1 = "edit" ]
 then
 	read -p "Saisir le nom de l'hôte à modifier : " hostname
 	testexist
