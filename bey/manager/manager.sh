@@ -4,7 +4,7 @@
 basemachine=data.txt
 
 echo "Que souhaitez vous faire ? (Ajouter un hote(1), modifier un hote (2) ou supprimer (3)) ?"
-read choose
+read choice
 
 function add () {
 	echo "$host"":""$ip"":""$distribution"":""$os"":""$user"":""$envi" >> ${basemachine}
@@ -44,7 +44,7 @@ function delete () {
 	fi
 }
 
-case $choose in
+case $choice in
 	1)
 		echo "Veuillez saisir un nom d'hote :"
 	        read host

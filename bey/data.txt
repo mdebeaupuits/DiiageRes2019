@@ -1,2 +1,0 @@
-debianw:10.5.0.21:debian:GNU:root:production
-Debianweb1:10.5.0.254:Debian:GNU:root:prodcution
