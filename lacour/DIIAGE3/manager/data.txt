@@ -1,0 +1,1 @@
+hostname=srv2,ip=192.168.1.2
