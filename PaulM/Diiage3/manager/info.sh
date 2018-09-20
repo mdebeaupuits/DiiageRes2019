@@ -1,7 +1,7 @@
 function add()
 {
     
-    echo  "IP=$IP : hostname=$hostname : user=$user : mdp=$mdp : os=$os" >> $fic
+    echo  "IP=$IP : hostname=$hostname : user=$user : mdp=$mdp : os=$os" >> fic.txt
 
 }
 
@@ -9,7 +9,7 @@ function add()
 function del()
 {
     
-    sed -i "/$hostname/d" $fic
+    sed -i "/$hostname/d" fic.txt
 
 
 }
@@ -17,15 +17,15 @@ function del()
 function mod()
 {
 
-    sed -i "s/$host/$host2/g" $fic
-    sed -i "s/$ip/$ip2/g" $fic
-    sed -i "s/$user/$user2/g" $fic
-    sed -i "s/$mdp/$mdp2/g" $fic
-    sed -i "s/$os/$os2/g" $fic
+    sed -i "s/$host/$host2/g" fic.txt
+    sed -i "s/$ip/$ip2/g" fic.txt
+    sed -i "s/$user/$user2/g" fic.txt
+    sed -i "s/$mdp/$mdp2/g" fic.txt
+    sed -i "s/$os/$os2/g" fic.txt
 
 }
 
-fic= > /home/paul/Bureau/fic.txt
+#fic= > /home/paul/Bureau/fic.txt
 
 if [ $# -eq 0 ]
 then
@@ -37,13 +37,13 @@ if [ $1 = "add" ]
 then
 
     read -p "hostname : " hostname
-    verify=$(awk /"$hostname"/ $fic)
+    verify=$(awk /"$hostname"/ fic.txt)
     if [ "x$verify" != "x" ]
     then
         echo "$hostname existe deja"
         exit 
     fi
-    else
+   
 
     read -p "IP : " IP
     read -p "user : " user
