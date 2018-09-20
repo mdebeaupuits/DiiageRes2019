@@ -19,9 +19,8 @@ function supprimer(){
 	return $?
 }
 function modifier(){
-	echo "modifier"
 	ligne=$(grep $HOSTNAME $config)
-	echo $ligne | sed -i"data.txt" "s/$option=*/$option=$nvValeur/g"
+	echo "sed -i\"$config\" \"s/$OPTION=*/$OPTION=$nvValeur/g\""
 	return $?
 }
 
@@ -35,6 +34,10 @@ then
 fi
 if [ $1 = "ajout" ]
 then
+	if [ ! -e $config ]
+	then
+		touch $config
+	fi
         read -p "Hostname : " HOSTNAME
 	verifExist
 	if [ $exist -eq 1 ]
@@ -74,11 +77,14 @@ then
 fi
 if [ $1 = "modifier" ]
 then
-	shift
-	HOSTNAME=$2
-	echo $HOSTNAME
-	#read -p "Quel hôte modifier ? " HOSTNAME
+	#shift
+	#HOSTNAME=$2
+	#echo $HOSTNAME
+	read -p "Quel hôte modifier ? " HOSTNAME
         verifExist
+	read -p "Quelle propriété modifier ?" OPTION
+	read -p "Quelle est sa nouvelle valeur" nvValeur
+	
         if [ $exist -eq 0 ]
         then
                 echo "L'hote n'existe pas !"
