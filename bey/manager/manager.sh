@@ -19,7 +19,6 @@ function add () {
 }
 
 function modify () {
-
 	modify=$(grep ${host} ${basemachine})
         sed -i "s/${modify}/${newvaluech}/g" ${basemachine}
 
