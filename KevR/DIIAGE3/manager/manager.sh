@@ -1,4 +1,8 @@
+#!bin/bash
 
+#Script pour ajouter, supprimer ou modifier des entrées dans un fichier texte relatif à des serveurs
+
+#Fonction pour vérifier le fichier
 function checkFile()
 {
 	NbHost=$(awk '/HOST='$1'/{x+=1}END{print x}' $Filename)
@@ -10,6 +14,7 @@ function checkFile()
 	fi
 }
 
+#Initialisation
 function readHost()
 {
 	#Initialisation
@@ -39,6 +44,9 @@ function readHost()
 		echo "Il existe deja une entree pour ce serveur !"
 	fi
 }
+
+# Fonction pour ajouter une entrée
+
 function AddServer()
 {
 	checkVar $1
@@ -52,6 +60,7 @@ function AddServer()
 	fi
 }
 
+# Vérifier si les paramètres essentiels sont vides
 function checkVar()
 {
 	if [ -z "$1" ];
@@ -62,16 +71,19 @@ function checkVar()
 	fi
 }
 
+# Fonction pour supprimer une entree
 function DeleteServer()
 {
 	sed -i "/HOST=$SHostname/d" data.txt
 }
 
+# Fonction pour modifier une entree
 function EditServer()
 {
 
 }
 
+#Choix : Ajouter, Supprimer ou Modifier
 if [ $1 = "add" ]
 then
 	readHost
