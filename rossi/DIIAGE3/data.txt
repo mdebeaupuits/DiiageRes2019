@@ -1,2 +1,0 @@
-IP=test1 : HOSTNAME=TEST1 : USER=test1 : PASSWORD=test1: OS=test1 : ROLE=test1 : ENVIRONNEMENT=test1 : VLAN=test1
-IP=dzrae : HOSTNAME=TEST2 : USER=ezrt : PASSWORD=z: OS=zf : ROLE=ezf : ENVIRONNEMENT=ezf : VLAN=
