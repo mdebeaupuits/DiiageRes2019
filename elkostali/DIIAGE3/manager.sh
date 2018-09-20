@@ -1,0 +1,93 @@
+function verifExist(){
+	verifHostname=$(awk "/Hostname=$HOSTNAME/ {print}" $config)
+	if [ "x$verifHostname" != "x" ]
+        then
+		exist=1
+	else
+		exist=0
+	fi
+	return $exist
+	
+}
+function ajout(){
+	local IP=$1 HOSTNAME=$2 COMPTE=$3 AUTH=$4 OS=$5 ROLE=$6 VLAN=$7 ENVIRONNEMENT=$8
+	echo "IP=$IP:Hostname=$HOSTNAME:Compte=$COMPTE:Auth=$AUTH:OS=$OS:Role=$ROLE:VLAN=$VLAN:Environnement=$ENVIRONNEMENT" >> $config 
+	return $?
+}
+function supprimer(){
+	sed -i"$config" "/Hostname=$HOST/d" $config
+	return $?
+}
+function modifier(){
+	echo "modifier"
+	ligne=$(grep $HOSTNAME $config)
+	echo $ligne | sed -i"data.txt" "s/$option=*/$option=$nvValeur/g"
+	return $?
+}
+
+
+
+config="data.txt"
+if [ $# -lt 1 ]
+then
+	echo "$0 [ajout|supprimer|modfifier] (-h hostname -i\"IP=@IP:Compte=root...\" "
+	exit 1
+fi
+if [ $1 = "ajout" ]
+then
+        read -p "Hostname : " HOSTNAME
+	verifExist
+	if [ $exist -eq 1 ]
+	then
+		echo "Il existe déja un hôte avec ce nom"
+		exit
+	fi
+        read -p "IP : " IP
+        read -p "Compte : " COMPTE
+        read -p "Authentification : " AUTH
+        read -p "OS : " OS
+        read -p "Role : " ROLE
+        read -p "VLAN : " VLAN
+        read -p "Environnement : " ENVIRONNEMENT
+	ajout $IP $HOSTNAME $COMPTE $AUTH $OS $ROLE $VLAN $ENVIRONNEMENT
+	if [ $? -ne 0 ]
+	then
+		echo "Problème lors de l'ajout"
+		exit
+	fi
+fi
+if [ $1 = "supprimer" ]
+then
+	read -p "Quel hôte supprimer ? " HOST
+        verifExist
+        if [ $exist -eq 0 ]
+        then
+                echo "L'hote n'existe pas !"
+                exit
+        fi
+	supprimer
+        if [ $? -ne 0 ]
+        then
+                echo "Problème lors de la suppression"
+                exit
+        fi
+fi
+if [ $1 = "modifier" ]
+then
+	shift
+	HOSTNAME=$2
+	echo $HOSTNAME
+	#read -p "Quel hôte modifier ? " HOSTNAME
+        verifExist
+        if [ $exist -eq 0 ]
+        then
+                echo "L'hote n'existe pas !"
+                exit
+        fi
+        modifier
+        if [ $? -ne 0 ]
+        then
+                echo "Problème lors de la modification"
+                exit
+        fi
+fi
