@@ -1,0 +1,1 @@
+IP=10.5.0.21:Hostname=SAMY-serveur-ansible:Compte=root:Auth=clé:OS=Linux:Role=Web:VLAN=1:Environnement=PROD
