@@ -1,6 +1,6 @@
 #!/bin/bash
-#Envoie de fichier
-#Permet denvoyer un fichier sur une machine distante
+#Administration
+#Permet ladministration des machines du parc
 basemachine=data.txt
 
 echo "Que souhaitez vous faire ? (Ajouter un hote(1), modifier un hote (2) ou supprimer (3)) ?"
