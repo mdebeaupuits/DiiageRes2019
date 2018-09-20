@@ -1,0 +1,4 @@
+ip=10.5.0.2:hostname=debPolo:user=root:password=root:os=linux:distribution=deb9:role=web:environnement=prod
+ip=10.5.2.3:hostname=toto:user=root:password=root:os=Windows:distribution=10:role=web:environnement=prod
+ip=154.65.25.14:hostname=WinPaul:user=root:password=root:os=Windows:distribution=2016:role=AD/DS:environnement=production
+ip=192.168.5.4:hostname=srvdev:user=admin:password=admin:os=Windows:distribution=2012:role=Scripting:environnement=developpement
