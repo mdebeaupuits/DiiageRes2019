@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #function ajout d'une entrée
+fic="data.txt"
 function add () {
 if [[ $(grep $1 fic) ]];
 then
