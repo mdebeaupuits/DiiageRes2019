@@ -1,5 +1,5 @@
 #On déclare le fichier dans lequel on ajoutera,modif,suppr les PC
-fichier_conf=/root/Scripting/DiiageRes2019/data.txt
+fichier_conf=/root/Scripting/DiiageRes2019/rossi/DIIAGE3/manager/data.txt
 
 function verif_Doublon_Hostname()
 {
