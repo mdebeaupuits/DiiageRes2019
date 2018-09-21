@@ -2,21 +2,27 @@
 
 # Fonctions qui permet de créer, modifier, supprimer des entrées dans un fichier plat
 FIC='data.txt'
+USER='root'
+AUTH='Password'
+OS='Debian'
+ROLE='Web'
+VLAN='1'
+ENVIRONNEMENT='Production'
 echo " Do you want to add(1), modify (2), delete (3) a line?"
-read CHOIX
+read CHOICE
 
 # Fonction permettant d'ajouter une ligne dans le fichier ${FIC}
 function add (){
 	# This awk allows to check if the line already exists before ading it. If it exists the script stops itself.
-	awk "BEGIN  {i=1} /${ADD}/ {i=0} END {exit i}" ${FIC}; 
+	awk "BEGIN  {i=1} /${ADD}/ {i=0} END {exit i}" ${FIC};
 	if [[ $? -eq 0 ]]
 	then
-		echo " the line already exists."
+		echo "The line already exists."
 		return 1
 	fi
 
 	echo "${ADD}" >> ${FIC}
-	
+
 	if [[ $? -eq 1 ]]
 	then
 		echo "An error occured"
@@ -32,7 +38,7 @@ function delete (){
 	if [[ $? -eq 1 ]]
 	then
 		echo "A problem occured while the suppression"
-		return 1 
+		return 1
 	else
 		return 0
 	fi
@@ -52,13 +58,13 @@ function check_ip (){
                         awk "BEGIN  {i=1} /${IP}/ {i=0} END {exit i}" ${FIC};
                         if [[ $? -eq 0 ]]
                         then
-	                        echo "L'adresse ${IP} existe déjà !"
-                                exit 1
+	                        echo "Address ${IP} already exist !"
+                                return 1
                         fi
                 else
-	                echo "Il faut saisir une adresse IP."
-                        exit 1
-                fi	
+	                echo "Please enter the IP address."
+                        return 1
+                fi
 }
 function check_hostname (){
 	awk "BEGIN  {i=1} /${HOSTNAME}/ {i=0} END {exit i}" ${FIC};
@@ -70,54 +76,89 @@ function check_hostname (){
 
 }
 function check_connectivity (){
-	ssh -o ConnectTimeout=10 ${ACCOUNT}@${IP}
+	ssh -o ConnectTimeout=10 ${USER}@${IP}
 	if [[ $? -ne 0 ]]
 	then
 		echo "connexion problem, check the account, the password or the IP address specified"
 		return 1
-	fi	
+	fi
 
 }
-case $CHOIX in
+case $CHOICE in
 	1)
 		echo "Give the IP address"
         	read IP
+
+		#Verify IP address function
 		check_ip
+		if [[ $? -eq 1 ]]
+                then
+                        exit 1
+                        echo "Invalide IP address"
+                fi
+
         	echo "Give the hostname"
         	read HOSTNAME
+
+		#Go to the function for test the hostname
 		check_hostname
+		if [[ $? -eq 1 ]]
+		then
+			exit 1
+			echo "The hostname is already exist on database"
+		fi
+
+		#End of function verify hostname
         	echo "Give the user account"
-        	read ACCOUNT
-        	echo "Give the password to connect to the host"
-        	read MDP
-		echo "testez de vous connecter à la machine pour vérifier le compte et le mdp"
+        	read USER
+
+		echo "Entrer the authentification methode"
+		read AUTH
+		echo "trying to connect to the remote machine"
+
+		#Test the remote connexion
 		check_connectivity
+		if [[ $? -eq 1 ]]
+                then
+                        exit 1
+                        echo "Cannot connect to the remote host"
+                fi
+
+		#End of verity connectivity
         	echo "Give the OS of the host"
         	read OS
+
         	echo "Give the role of the host"
         	read ROLE
+
+		echo "Enter the VLAN ?"
+		read VLAN
+
         	echo "Give the environnment of the machine"
         	read ENVIRONNEMENT
-		ADD="IP=$IP:HOSTNAME=$HOSTNAME:ACCOUNT=$ACCOUNT:MDP=$MDP:OS=$OS:ROLE=$ROLE:ENVIRONNEMENT=$ENVIRONNEMENT"
+
+		ADD="IP=$IP:Hostname=$HOSTNAME:User=$USER:Auth=$AUTH:OS=$OS:Role=$ROLE:VLAN=$VLAN:Environnement=$ENVIRONNEMENT"
 		add
 		;;
 	2)
 		echo "which host do you want to modify"
 		read HOST
+
 		grep ${HOST} ${FIC}
 		echo "copy the line above and modify what you want "
 		read VALUE
+
 		MODIFY=$(grep ${HOST} ${FIC})
-		modify 
-		
+		modify
 		;;
 	3)
-		cat ${FIC} |awk -F ":" '{ print $2 }'	
+		cat ${FIC} |awk -F ":" '{ print $2 }'
 		echo "Which host do you want to delete? "
 		read DELETE
+
 		delete ${DELETE}
 		;;
-	*)	
+	*)
 		echo "You have to enter a number between 1 and 3. Exit"
 		exit 1
 esac
@@ -136,4 +177,3 @@ case $1 in
 		${DELETE}=${2}
 		;;
 esac
-
