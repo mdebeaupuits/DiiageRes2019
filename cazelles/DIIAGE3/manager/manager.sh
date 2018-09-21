@@ -16,7 +16,7 @@ function remove(){
 
 #Test de la connection  SSH 
 function testSsh(){
-	hostnameSsh=$(ssh $user@$ip "hostname")
+	hostnameSsh=$(ssh -o ConnectTimeout=5 $user@$ip "hostname")
 	if [[ $hostnameSsh = $host ]]
 	then
 		return 1
@@ -67,12 +67,16 @@ fi
 
 if [ $1 = "remove" ]
 then
-	read -p "Quelles machine supprimer:" hostrm
+	read -p "Quelle machine supprimer:" hostrm
 	remove
 fi
 
 
 if [ $1 = "edit" ]
 then
-	echo "lol"
+	read -p "Quelle machine modifier" hostedit
+	#MODIFY=$(grep "${HOST}" ${FIC} | awk -F ":" '{ print $2 }' | cut -d "=" -f2)
+	#cat ${FIC} | awk -F ":" '/${HOST}/ { print $2}' | cut -d "=" -f2 |sed -i
+	#sed -i "s/${MODIFY}/${VALUE}/g" ${FIC}
+#sed -i "s/${MODIFY}/${VALUE}/g" ${FIC}
 fi
