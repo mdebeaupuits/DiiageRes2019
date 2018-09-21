@@ -14,6 +14,7 @@ function add (){
 		echo " the line already exists."
 		return 1
 	fi
+
 	echo "${ADD}" >> ${FIC}
 	
 	if [[ $? -eq 1 ]]
@@ -49,6 +50,15 @@ case $CHOIX in
 	1)
 		echo "Give the IP address"
         	read IP
+		
+		if [[ ${IP} =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]]
+		then
+			echo "${IP} est une ip"
+		else
+			echo "cest pas le cas"
+			exit 1
+		fi	
+
         	echo "Give the hostname"
         	read HOSTNAME
         	echo "Give the user account"
