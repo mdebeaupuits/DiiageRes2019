@@ -46,6 +46,13 @@ function checkIPFormat()
   		echo "Adresse IP INCORRECT"
 		exit
 	fi
+
+	ssh -o ConnectTimeout=5 $IP echo "" > /dev/null 2>&1
+	if [ $? -ne 0 ]
+	then
+		echo "L'hote est pas dispo "
+		exit
+	fi
 }
 
 
