@@ -1,6 +1,6 @@
 debianw:10.5.0.21:debian:GNU:root:production
 Debianweb1:10.5.0.254:Debian:GNU:root:prodcution
 srvweb:10.5.0.42:GNU:Debian:root:Production
-IIS:10.5.0.35:WindowsServer2012:WindowsServer2012:Administrateur:developpement
 MBP-de-Clement:10.4.0.5:OSX:OSX 10.13:root:developpement
 srvpostgres:10.5.0.250:CentOS:GNU:root:prdocution
+IP=10.5.0.35:Hostname=truc:User=root:Auth=:OS=debian:Role=web:Vlan=1:Environnement=prod
