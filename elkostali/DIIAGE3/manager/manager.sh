@@ -1,6 +1,6 @@
 #!/bin/bash
 function verifExist(){
-	if [ $HOSTNAME = "" ]
+	if [ -z $HOSTNAME ]
 	then
 		echo "Entrez un hostname !"
 		exit
@@ -52,6 +52,10 @@ then
 		exit
 	fi
         read -p "IP : " IP
+	if ! [[ $IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+		echo "Mauvaise format d'adresse ip ! "
+		exit
+	fi
         read -p "Compte : " COMPTE
         read -p "Authentification : " AUTH
         read -p "OS : " OS
