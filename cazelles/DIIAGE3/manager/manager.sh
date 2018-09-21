@@ -9,6 +9,15 @@ function remove(){
 	sed -i "/Hostname=$hostrm/d" $txt
 	return $?
 }
+function testSsh(){
+	hostnameSsh=$(ssh $user@$ip "hostname")
+	if [[ $hostnameSsh = $host ]]
+	then
+		return 1
+	else
+		return 0
+	fi
+}
 
 if [ $# -eq 0 ]
 then
@@ -31,6 +40,13 @@ then
 	fi
 	read -p "User:" user
 	read -p "Password:" password
+	testSsh
+	testSsh=$?
+	if [ $testSsh -eq 0 ]
+	then
+		echo "le serveur n'est pas accessible"
+		exit
+	fi
 	read -p "OS:" os
 	read -p "Distrib :" distrib
 	read -p "Rôle :" role

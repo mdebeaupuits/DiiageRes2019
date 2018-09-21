@@ -3,3 +3,4 @@ IP=test:Hostname=test:User=test:Password=test:OS=test:Distrib=test:Role=test:VLA
 IP=1010:Hostname=srvintra:User=root:Password=root:OS=oot:Distrib=ota:Role=ada:VLAN=ze:Env=fe
 IP=10.5.0.69:Hostname=DebCaz:User=root:Password=root:OS=Linux:Distrib=Debian9:Role=Configuration:VLAN=salleRes:Env=dev
 IP=a:Hostname=test1:User=dqs:Password=qsd:OS=qsd:Distrib=qsd:Role=qs:VLAN=qsd:Env=qsd
+IP=10.5.0.169:Hostname=DebCazStorage:User=root:Password=root:OS=Linux:Distrib=Debian9:Role=Ssh:VLAN=res:Env=dev
