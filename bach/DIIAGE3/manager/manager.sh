@@ -2,6 +2,12 @@
 
 # Fonctions qui permet de créer, modifier, supprimer des entrées dans un fichier plat
 FIC='data.txt'
+USER='root'
+AUTH='Password'
+OS='Debian'
+ROLE='Web'
+VLAN='1'
+ENVIRONNEMENT='Production'
 echo " Do you want to add(1), modify (2), delete (3) a line?"
 read CHOICE
 
