@@ -24,9 +24,14 @@ function verif_ip () {
 function ssh_timeout () {
                 ssh -o ConnectTimeout=10 ${user}@${ip}
                 if [[ $? -gt 1 ]]; then
+<<<<<<< HEAD
                 echo "Fail, an error occured because a wrong IP address or a wrong port was specified"
                 return 1
 		# KBA # RAJOUT du code 1
+=======
+                	echo "fail, erreur dans l'adresse IP ou port non ouvert ?"
+                	exit
+>>>>>>> 8c6ab4a598501c8f7c1655178d650b45b8e284d7
                 fi
 }
 

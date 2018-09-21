@@ -1,10 +1,12 @@
 #!/bin/bash
+#Proposition d'amélioration :
+#Création de la fonction d'édition
 
 #On déclare le fichier dans lequel on ajoutera,modif,suppr les PC
-fichier_conf=/root/Scripting/DiiageRes2019/rossi/DIIAGE3/manager/data.txt
+confFile=data.txt
 
 #fonction permettant de vérifier si un hote existe deja dans la liste
-function verif_Doublon_Hostname()
+function checkHostname()
 {
 	if [ -z "$HOSTNAME"  ]
 	then
@@ -12,7 +14,7 @@ function verif_Doublon_Hostname()
 		exit
 	fi
 
-	verify=$(awk /"HOSTNAME=$HOSTNAME/ {print}" $fichier_conf) 
+	verify=$(awk /"HOSTNAME=$HOSTNAME/ {print}" $confFile) 
         if [ "x$verify" = "x" ]
         then
                 exist=0
@@ -22,10 +24,10 @@ function verif_Doublon_Hostname()
 }
 
 #Fonction permettant de verifier si une IP existe deja dans la liste
-function verif_IP()
+function checkIP()
 {
 	re='^(0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\.){3}'
-	re+='0*(1?[0-9]{1,2}|2([‌​0-4][0-9]|5[0-5]))$'
+	re+='0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))$'
 
 	if ! [[ $IP =~ $re ]];
 	then
@@ -36,32 +38,41 @@ function verif_IP()
 
 
 #Fonction permettant d'ajouter un hote a la liste
+#Changement de l'affichage
 function add()
 {
-	echo "IP=$IP : HOSTNAME=$HOSTNAME : USER=$USER : PASSWORD=$PASSWORD: OS=$OS : ROLE=$ROLE : ENVIRONNEMENT=$ENVIRONNEMENT : VLAN=$VLAN" >>$fichier_conf
+	echo "IP=$IP:Hostname=$HOSTNAME:Compte=$COMPTE:Auth=$AUTH:OS=$OS:Role=$ROLE:VLAN=$VLAN:Environnement=$ENVIRONNEMENT" >> $confFile
 }
 
 
 #Fonction permettant de supprimer un hote de la liste
+#Pas de message d'erreur si on tente de supprimer un hôte n'existant pas
 function delete()
 {
-	sed -i "/$HOSTNAME/d" $fichier_conf
+	sed -i "/$HOSTNAME/d" $confFile
 }
 
 
 #Tester le nombre de param, si pas 1 param alors on affiche l'aide de la cmd
+#MESSAGE D'ERREUR LORS DE LEXEC DU SCRIPT SANS PARAMETRE
 if [ $# -ne 1 ]
 then
 	echo "Utilisation : NomScript + add | edit | delete "
+	exit
 fi
 
+#Verification de l'existence du fichier de configuration
+if [ ! -e $confFile ]
+then
+	touch $confFile
+fi
 
 #Si le param est ajouter alors on appel la fonction ajouter
 if [ $1 = "add" ]
 then
 	echo "Ajouter un nouvel hôte à la liste : "
         read -p "HOSTNAME : " HOSTNAME
-	verif_Doublon_Hostname
+	checkHostname
 
 	if [ $exist -eq 1 ]
 	then
@@ -70,10 +81,10 @@ then
 	fi
 
 	read -p "IP : " IP
-	verif_IP
+	checkIP
 
         read -p "USER : " USER
-        read -p "PASSWORD : " PASSWORD
+        read -p "AUTH : " AUTH
         read -p "OS : " OS
         read -p "ROLE : " ROLE
         read -p "ENVIRONNEMENT : " ENVIRONNEMENT
@@ -95,4 +106,10 @@ then
 	echo "Supprimer un hote :"
 	read -p "HOSTNAME : " HOSTNAME
 	delete
+	checkHostname
+	if [ $exist -eq 0 ]
+        then
+                echo "L'hote n'existe pas"
+                exit
+        fi
 fi
