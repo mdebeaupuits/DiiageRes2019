@@ -1,5 +1,5 @@
 #!/bin/bash
-#Proposition d'amélioration : 
+#Proposition d'amélioration :
 #Création de la fonction d'édition
 
 #On déclare le fichier dans lequel on ajoutera,modif,suppr les PC
@@ -84,7 +84,7 @@ then
 	checkIP
 
         read -p "USER : " USER
-        read -p "PASSWORD : " PASSWORD
+        read -p "AUTH : " AUTH
         read -p "OS : " OS
         read -p "ROLE : " ROLE
         read -p "ENVIRONNEMENT : " ENVIRONNEMENT
