@@ -27,16 +27,12 @@ function checkIP(){
 		exit
 	fi
 
-	#if [ $AUTH != "cle" ]
-	#then
-	#	nohup "ssh-copy-id root@$IP -o \"ConnectTimeout 2\" "
-	#fi
-	#testHostname=$(nohup "ssh root@$IP \"hostname\" -o \"ConnectTimeout 2\"")
-	#if [ -z $testHostname ]
-	#then
-	#	echo "La connexion SSH a échoué"
-	#	exit
-	#fi
+	ssh -o ConnectTimeout=5 $IP echo "" > /dev/null 2>&1
+    	if [ $? -ne 0 ]
+    	then
+		echo "L'hote ne répond pas !"
+    		exit
+    	fi
 }
 
 #Mettre des espaces pour affichage meilleur
