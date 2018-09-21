@@ -1,0 +1,4 @@
+#!/bin/bash
+declare -A montab=(["production"]=$(declare -A machine1=(["ip"]=192.168.0.1 ["role"]="web")))
+#echo ${montab["production${machine1["ip"]}"]}
+envi=${montab["production"]}

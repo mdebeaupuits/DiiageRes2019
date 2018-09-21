@@ -1,0 +1,1 @@
+hostname=debian:ip=10.10.10.10:user=admin:mdp=admin:os=win:role=web

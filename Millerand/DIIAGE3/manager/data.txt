@@ -1,0 +1,3 @@
+HOST=Web:IP=10.5.0.1:UTIL=root:MDP=root:OS=GNU:ROLE=Web:VLAN=1:ENV=Developpement
+HOST=DC:IP=10.5.0.2:UTIL=root:MDP=root:OS=GNU/Linux:ROLE=DC:VLAN=1:ENV=Dev
+HOST=BDD:IP=10.5.0.3:UTIL=root:MDP=root:OS=GNU/Linux:ROLE=BDD:VLAN=Mongodb:ENV=1*$

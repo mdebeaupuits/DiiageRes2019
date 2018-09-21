@@ -1,4 +1,10 @@
+#!/bin/bash
 function verifExist(){
+	if [ -z $HOSTNAME ]
+	then
+		echo "Entrez un hostname !"
+		exit
+	fi
 	verifHostname=$(awk "/Hostname=$HOSTNAME/ {print}" $config)
 	if [ "x$verifHostname" != "x" ]
         then
@@ -20,7 +26,7 @@ function supprimer(){
 }
 function modifier(){
 	ligne=$(grep $HOSTNAME $config)
-	echo "sed -i\"$config\" \"s/$OPTION=*/$OPTION=$nvValeur/g\""
+	sed -i"$config" "s/$OPTION=.*:/$OPTION=$nvValeur:/g" $config
 	return $?
 }
 
@@ -46,6 +52,10 @@ then
 		exit
 	fi
         read -p "IP : " IP
+	if ! [[ $IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+		echo "Mauvaise format d'adresse ip ! "
+		exit
+	fi
         read -p "Compte : " COMPTE
         read -p "Authentification : " AUTH
         read -p "OS : " OS

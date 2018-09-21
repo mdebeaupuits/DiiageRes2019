@@ -5,7 +5,7 @@ fic="data.txt"
 function add () {
 if [[ $(grep $1 fic) ]];
 then
-	echo $1 "est déja dans fic";
+	echo $1 "est déja présent dans" ${fic} ;
 else
 	echo $1>>fic;
 	cat fic;

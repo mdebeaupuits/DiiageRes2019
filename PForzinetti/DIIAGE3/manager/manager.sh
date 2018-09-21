@@ -67,6 +67,22 @@ function delfic()
 	sed -i "/HOST=$hostnameperso/d" data.txt
 }
 
+function readmodif()
+{
+	echo "Type de donnee a modifier"
+	read type
+	echo "Ancienne valeure"
+	read hold
+	echo "Nouvelle valeur"
+	read new
+	editfic $type $hold $new
+}
+
+function editfic()
+{
+	sed -i -e 's/'$1'='$2'/'$1'='$3'/g' data.txt
+	echo $1'='$2'/'$1'='$3
+}
 
 if [ $1 = "add" ]
 then
@@ -81,6 +97,6 @@ fi
 
 if [ $1 = "edit" ]
 then
-	FunModifier
+	readmodif
 fi
 
