@@ -1,6 +1,4 @@
 #!/bin/bash
-#Aucun commentaire dans le code pour expliquer les commandes !!
-
 #Fonction permettant de verifier si un hote existe deja
 function checkExist(){
 	if [ -z $HOSTNAME ]
@@ -19,8 +17,8 @@ function checkExist(){
 }
 #Fonction permettant de verifier si une IP existe deja
 function checkDoubleIP(){
-        checkFormatIP=$(awk "/IP=$IP/ {print}" $config)
-        if [ "x$checkFormatIP" = "x" ]
+        checkIP=$(awk "/IP=$IP/ {print}" $config)
+        if [ "x$checkIP" != "x" ]
         then
 		echo "Cette adresse IP est déja renseignée"
 		exit
@@ -49,21 +47,37 @@ function checkFormatIP(){
 function add(){
 	local IP=$1 HOSTNAME=$2 COMPTE=$3 AUTH=$4 OS=$5 ROLE=$6 VLAN=$7 ENVIRONNEMENT=$8
 	echo "IP=$IP:Hostname=$HOSTNAME:Compte=$COMPTE:Auth=$AUTH:OS=$OS:Role=$ROLE:VLAN=$VLAN:Environnement=$ENVIRONNEMENT" >> $config 
-	return $?
+        if [[ $? -ne 0 ]]
+        then
+                echo "Echec lors de l'ajout"
+                return $? 
+        fi
+
 }
 
 #Fonction permettant de supprimer un hote du fichier
 function delete(){
 	sed -i"$config" "/Hostname=$HOST/d" $config
-	return $?
+        if [[ $? -ne 0 ]]
+        then
+                echo "Echec lors de la suppression"
+                return $?
+        fi
+
 }
 
-#Fonction permettant d'editer un hote du fichier
-#TODO : Modifier la fonction car porblème de substitution supprime beaucoup de champs de la ligne
-function edit(){
-	ligne=$(grep $HOSTNAME $config)
-	sed -i"$config" "s/$OPTION=.*:/$OPTION=$nvValeur:/g" $config
-	return $?
+function edit () {
+	LIGNE=$(grep $HOSTNAME $config)
+	echo "Copier coller cette ligne puis modifier la : "
+	echo "$LIGNE"
+	read NEWVALUE
+        sed -i "s/$LIGNE/$NEWVALUE/g" $config
+        #Retour erreur
+        if [[ $? -ne 0 ]]
+        then
+                echo "Echec lors de la modification"
+                return $?
+        fi
 }
 
 
@@ -105,6 +119,7 @@ then
 		exit
 	fi
 fi
+
 if [ $1 = "delete" ]
 then
 	read -p "Quel hôte supprimer ? " HOST
@@ -115,18 +130,12 @@ then
                 exit
         fi
 	delete
-        if [ $? -ne 0 ]
-        then
-                echo "Problème lors de la suppression"
-                exit
-        fi
 fi
+
 if [ $1 = "edit" ]
 then
 	read -p "Quel hôte modifier ? " HOSTNAME
         checkExist
-	read -p "Quelle propriété modifier ?" OPTION
-	read -p "Quelle est sa nouvelle valeur" newValue
 
         if [ $exist -eq 0 ]
         then
@@ -134,9 +143,4 @@ then
                 exit
         fi
         edit
-        if [ $? -ne 0 ]
-        then
-                echo "Problème lors de la modification"
-                exit
-        fi
 fi
