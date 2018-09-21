@@ -3,23 +3,35 @@
 #Permet ladministration des machines du parc
 basemachine=data.txt
 
-echo "Que souhaitez vous faire ? (Ajouter un hote(1), modifier un hote (2) ou supprimer (3)) ?"
+echo "what do you want to do? (ADD a host(1), MODIFY a host(2)or delete a host  (3)) ?"
 read choice
 
 function verif_ip () {
 	if [[ "$ip" =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]]; then
-  		echo ""
+  		awk "BEGIN  {i=1} /${ip}/ {i=0} END {exit i}" ${basemachine};
+		if [[ $? -eq 0 ]]
+		then
+			echo "The IP address already exist"
+			return 1
+		fi	
 	else
-  		echo "fail, entrer une adresse IP valide"
-		exit
+  		echo "fail, enter a valid IP ADDRESS"
+		return 1
+		#KBA# mettre un code retour
 	fi
 }
 
 function ssh_timeout () {
                 ssh -o ConnectTimeout=10 ${user}@${ip}
                 if [[ $? -gt 1 ]]; then
-                echo "fail, erreur dans l'adresse IP ou port non ouvert ?"
-                exit
+<<<<<<< HEAD
+                echo "Fail, an error occured because a wrong IP address or a wrong port was specified"
+                return 1
+		# KBA # RAJOUT du code 1
+=======
+                	echo "fail, erreur dans l'adresse IP ou port non ouvert ?"
+                	exit
+>>>>>>> 8c6ab4a598501c8f7c1655178d650b45b8e284d7
                 fi
 }
 
@@ -27,7 +39,7 @@ function add () {
 	awk "BEGIN  {i=1} /${ADD}/ {i=0} END {exit i}" ${basemachine};
 	if [[ $? -eq 0 ]]
 	then
-		echo "La machine est deja presente dans la base"
+		echo "The machine is already in the base"
 		return 1
 	fi
 
@@ -36,9 +48,12 @@ function add () {
 	#Retour erreur
 	if [[ $? -eq 0 ]]
 	then
-		echo "Hote ajouté"
+		echo "host added"
+		return 0
 	else
-		echo "Erreur non spécifiée"
+		echo "Unspecified error"
+		return 1
+		#KBA# ajout du return
 	fi
 }
 
@@ -49,61 +64,88 @@ function modify () {
 	#Retour erreur
 	if [[ $? -eq 0 ]]
         then
-                echo "Hote modifié"
+                echo "Host modified"
+		return 0
         else
-                echo "Erreur non spécifiée"
+                echo "Unspecified error"
+		return 1
         fi
 }
 
+function check_hostname () {
+	awk "BEGIN  {i=1} /${host}/ {i=0} END {exit i}" ${basemachine};
+	if [[ $? -eq 0 ]]
+	then
+		echo "the hostname already exists"
+		return 1
+	else
+		return 0
+	fi
+}
 function delete () {
 	sed -i "/${host}/d" ${basemachine}
 
 	#Retour erreur
 	if [[ $? -eq 0 ]]
 	then
-		echo "Hote supprimé"
+		echo "Host deleted"
+		return 0
 	else
-		echo "Erreur non spécifiée"
+		echo "Unspecified error"
+		return 1
 	fi
 }
 
 case $choice in
 	1)
-		echo "Veuillez saisir un nom d'hote :"
-	        read host
-	        echo "Veuillez saisir l'adresse IP de la machine :"
+	        echo "Enter the IP address :"
         	read ip
+		verif_ip
+		if [[ $? -eq 1 ]]
+		then
+			exit 1
+		fi
+		echo "Enter the hostname : "
+	        read host
+		check_hostname
+		if [[ $? -eq 1 ]]
+                then
+                        exit 1
+                fi
 
 		#Verification de l'adresse IP
-		verif_ip
-
-        	echo "Veuillez saisir le nom d'utilisateur de la machine :"
+        	echo "Enter the account :"
         	read user
-
+		echo "give the authentification mode"
 		#Initialisation de la connxion SSH
-		echo "Verification des informations en cours... (Ctrl+D pour quitter la machine une fois connecté et continuer le script)"
+		echo "Check in progress..."
 		ssh_timeout
-
-        	echo "Veuillez saisir le nom de la distribution :"
-        	read distribution
-        	echo "Veuillez saisir l'OS de la machine :"
-        	read os
-        	echo "Environnement de la machine (prod, recette, developpement) ?"
+		if [[ $? -eq 1 ]]
+		then
+			exit 1
+	        fi
+		echo "Give the OS"
+		read os
+		echo "Give the role of the machine"
+		read role
+		echo "Give the vlan"
+		read vlan
+        	echo "Host environnment (prod, recipe, development) ?"
         	read envi
-		ADD="$host"":""$ip"":""$distribution"":""$os"":""$user"":""$envi"
+		ADD="IP=$ip:Hostname=$host:User=$user:Auth=$auth:OS=$os:Role=$role:Vlan=$vlan:Environnement=$envi"
 		add
 		;;
 	2)
-		echo "Quel machine souhaitez vous modifier ?"
+		echo "which host do you want to modify ?"
 		read host
 		grep ${host} ${basemachine}
-		echo "Copier l'ancienne ligne et changer la configuration :"
+		echo "Copy the line above and change it"
 		read newvaluech
 		modify
 		;;
 
 	3)
-		echo "Veuillez saisir le nom de la machine :"
+		echo "give the hostname :"
 		read host
 		delete
 		;;
