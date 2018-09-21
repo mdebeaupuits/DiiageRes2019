@@ -12,6 +12,7 @@ function testexist(){
 }
 
 function testinteg(){
+	#Verification du format des adresses IP
 	ip2=$ip
     	stat=1
     	if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
@@ -27,11 +28,13 @@ function testinteg(){
 }
 
 function testssh(){
+	#Verification des serveur via test SSH
 	ssh $user@$ip
 	return $?
 }
 
 function add(){
+	#Ecriture du fichier
 	echo "ip="$ip":hostname="$hostname":user="$user":password="$password":os="$os":distribution="$distribution":role="$role":environnement="$environnement  >>$filename
 }
 
@@ -40,6 +43,7 @@ function edit(){
 }
 
 function remove(){
+	#Suppression d un element dans le fichier data
 	sed -i "/hostname=$hostname/d" $filename
 }
 
