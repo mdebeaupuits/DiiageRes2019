@@ -1,4 +1,10 @@
+#!/bin/bash
 function verifExist(){
+	if [ $HOSTNAME = "" ]
+	then
+		echo "Entrez un hostname !"
+		exit
+	fi
 	verifHostname=$(awk "/Hostname=$HOSTNAME/ {print}" $config)
 	if [ "x$verifHostname" != "x" ]
         then
@@ -20,7 +26,7 @@ function supprimer(){
 }
 function modifier(){
 	ligne=$(grep $HOSTNAME $config)
-	echo "sed -i\"$config\" \"s/$OPTION=*/$OPTION=$nvValeur/g\""
+	sed -i"$config" "s/$OPTION=.*:/$OPTION=$nvValeur:/g" $config
 	return $?
 }
 
