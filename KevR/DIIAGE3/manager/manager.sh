@@ -1,11 +1,7 @@
-#!bin/bash
-
-#Script pour ajouter, supprimer ou modifier des entrées dans un fichier texte relatif à des serveurs
-
-#Fonction pour vérifier le fichier
-function checkFile()
-{
-	NbHost=$(awk '/HOST='$1'/{x+=1}END{print x}' $Filename)
+#!/bin/bash
+FileName="data.txt"
+function CheckFile() {
+	NbrHost=$(awk '/HOST='$1'/{x+=1}END{print x}' $FileName)
 	if [ $NbrHost > 0 ]
 	then
 		exist="1"
@@ -13,90 +9,113 @@ function checkFile()
 		exist="0"
 	fi
 }
-
-#Initialisation
-function readHost()
-{
-	#Initialisation
-	echo "Veuillez entrer le nom d'hote :"
+function ReadHost() {
+	#Interaction utilisateur
+	echo "Nom d'hote"
 	read Host
-	checkFile $Host
+	if [ "$Host" = "" ]
+		then
+		echo "Il faut au moins rentrer un hote!"
+		exit
+fi
+	CheckFile $Host
 	if [ $exist = "0" ]
 	then
-		echo "Veuillez entrer le nom du fichier de donnees :"
-		read Filename
-		echo "Veuillez entrer une adresse IP :"
+		echo "Adresse IP"
 		read Ip
-		echo "Veuillez entrer un nom d utilisateur :"
-		read UserName
-		echo "Veuillez entrer un mot de passe :"
+		if [ "$Ip" = "" ]
+			then
+			echo "Il faut au moins rentrer une IP!"
+			exit
+		fi
+		#echo $Ip
+		if [[ $Ip =~  "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$" ]]
+			then
+				echo "Ce n est pas une adresse IP valable !"
+				exit
+			else
+		echo "Compte utilisateur a utiliser"
+		read Login
+		echo "Mot de passe du compte"
 		read Password
-		echo "Veuillez entrer un OS :"
+		echo "OS"
 		read Os
-		echo "Veuillez entrer un role :"
+		echo "Role de ce serveur"
 		read Role
-		echo "Veuillez entrer un Vlan :"
+		echo "Vlan"
 		read Vlan
-		echo "Veuillez entrer un Environnement (Production, Recette ou Developpement)"
+		echo "Environnement (Production / Recette / Developpement)"
 		read Env
-		AddServer $Host $Ip $UserName $Password $Os $Role $Vlan $Env
+		AddFile $Host $Ip $Login $Password $Os $Role $Vlan $Env 
+		fi
 	else
-		echo "Il existe deja une entree pour ce serveur !"
+		echo "Le serveur existe déja"
 	fi
 }
 
-# Fonction pour ajouter une entrée
-
-function AddServer()
-{
-	checkVar $1
-	checkVar $2
-	#Ajout de l entree dans le fichier
-	if [ $emptyvar = 1 ]
+##Permet d'ajouter un fichier
+function AddFile() {
+	CheckVar $1
+	CheckVar $2
+	#Ajout dans le fichier
+	if [ $varvide = 1 ]
 	then
-		echo "Il manque un hostname ou une IP !!"
+		echo "Une variable est vide"
 	else
-		echo "HOST=$1:IP=$2:USER=$3:PASSWORD=$4:OS=$5:ROLE=$6:VLAN=$7:ENV=$8" >> $Filename
+		echo "HOST=$1:IP=$2:UTIL=$3:MDP=$4:OS=$5:ROLE=$6:VLAN=$7:ENV=$8" >> $FileName
 	fi
 }
 
-# Vérifier si les paramètres essentiels sont vides
-function checkVar()
-{
+##Permet de savoir si le paramètre Nom est saisi
+function CheckVar() {
 	if [ -z "$1" ];
 	then
-		emptyvar="1"
+		varvide="1"
 	else
-		emptyvar="0"
+		varvide="0"
 	fi
 }
 
-# Fonction pour supprimer une entree
-function DeleteServer()
-{
-	sed -i "/HOST=$SHostname/d" data.txt
+##Fonction aidant a supprimer une entrée par rapport au nom
+function DeleteFile() {
+	sed -i "/HOST=$Hostname/d" $FileName
 }
 
-# Fonction pour modifier une entree
-function EditServer()
-{
+#Fonction check Ip
 
+function CheckIP() {
+if [ "$1" = "" ]
+	then
+	ipempty="1"
+	echo "Veuillez mettre une IP valable"
+	exit
+	else
+	ipempty="0"
+
+	if [[ $1 =~ "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$" ]]
+		then
+		ipok="1"
+		else
+		ipok="0"
+	fi
+if
 }
 
-#Choix : Ajouter, Supprimer ou Modifier
-if [ $1 = "add" ]
-then
-	readHost
-fi
+##Permet de selectionner les options
 
-if [ $1 = "del" ]
+if [ $1 = "add" ] 
 then
-	read SHostname
-	DeleteServer
-fi
+ReadHost 
+fi 
 
-if [ $1 = "edit" ]
+if [ $1 = "del" ] 
 then
-	EditServer
-fi
+read Hostname
+DeleteFile 
+fi 
 
+
+if [ $1 = "edit" ] 
+then
+FunModifier 
+fi
