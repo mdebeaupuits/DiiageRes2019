@@ -62,7 +62,7 @@ function AddFile() {
 	fi
 }
 
-##Permet de savoir si le paramètre Nom est saisi
+##Permet de savoir si le paramètre Host est saisi
 function CheckVar() {
 	if [ -z "$Host" ];
 	then

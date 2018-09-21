@@ -1,6 +1,4 @@
 #!/bin/bash
-#Aucun commentaire dans le code pour expliquer les commandes !!
-
 #Fonction permettant de verifier si un hote existe deja
 function checkExist(){
 	if [ -z $HOSTNAME ]
@@ -18,7 +16,17 @@ function checkExist(){
 	return $exist
 }
 #Fonction permettant de verifier si une IP existe deja
-function checkIP(){
+function checkDoubleIP(){
+        checkIP=$(awk "/IP=$IP/ {print}" $config)
+        if [ "x$checkIP" != "x" ]
+        then
+		echo "Cette adresse IP est déja renseignée"
+		exit
+        fi
+
+}	
+#Fonction verifiant le format de l'adresse IP puis test la connexion SSH	
+function checkFormatIP(){
 	regex='^(0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\.){3}'
 	regex+='0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))$'
 
@@ -35,28 +43,47 @@ function checkIP(){
     	fi
 }
 
-#Mettre des espaces pour affichage meilleur
 #fonction permettant d'ajouter un hote au fichier
 function add(){
 	local IP=$1 HOSTNAME=$2 COMPTE=$3 AUTH=$4 OS=$5 ROLE=$6 VLAN=$7 ENVIRONNEMENT=$8
 	echo "IP=$IP:Hostname=$HOSTNAME:Compte=$COMPTE:Auth=$AUTH:OS=$OS:Role=$ROLE:VLAN=$VLAN:Environnement=$ENVIRONNEMENT" >> $config 
-	return $?
+        if [[ $? -ne 0 ]]
+        then
+                echo "Echec lors de l'ajout"
+                return $? 
+        fi
+
 }
+
 #Fonction permettant de supprimer un hote du fichier
 function delete(){
 	sed -i"$config" "/Hostname=$HOST/d" $config
-	return $?
+        if [[ $? -ne 0 ]]
+        then
+                echo "Echec lors de la suppression"
+                return $?
+        fi
+
 }
-#Fonction permettant d'editer un hote du fichier
-function edit(){
-	ligne=$(grep $HOSTNAME $config)
-	sed -i"$config" "s/$OPTION=.*:/$OPTION=$nvValeur:/g" $config
-	return $?
+
+function edit () {
+	LIGNE=$(grep $HOSTNAME $config)
+	echo "Copier coller cette ligne puis modifier la : "
+	echo "$LIGNE"
+	read NEWVALUE
+        sed -i "s/$LIGNE/$NEWVALUE/g" $config
+        #Retour erreur
+        if [[ $? -ne 0 ]]
+        then
+                echo "Echec lors de la modification"
+                return $?
+        fi
 }
 
 
 #Declaration du fichier dans lequel on va stocker les postes
 config="data.txt"
+#Affichage de l'utilisation de la commande dans le cas où il manque un argument
 if [ $# -lt 1 ]
 then
 	echo "$0 [add|delete|edit] (-h hostname -i\"IP=@IP:Compte=root...\" "
@@ -64,6 +91,7 @@ then
 fi
 if [ $1 = "add" ]
 then
+	#Verification de l'existence du fichier de config
 	if [ ! -e $config ]
 	then
 		touch $config
@@ -78,7 +106,8 @@ then
         read -p "Compte : " COMPTE
         read -p "Authentification (saisir le mot de passe [mdp] ou si les clé SSH ont déja été echangées [cle]) : " AUTH
         read -p "IP : " IP
-	checkIP
+	checkDoubleIP
+	checkFormatIP
         read -p "OS : " OS
         read -p "Role : " ROLE
         read -p "VLAN : " VLAN
@@ -90,6 +119,7 @@ then
 		exit
 	fi
 fi
+
 if [ $1 = "delete" ]
 then
 	read -p "Quel hôte supprimer ? " HOST
@@ -100,21 +130,12 @@ then
                 exit
         fi
 	delete
-        if [ $? -ne 0 ]
-        then
-                echo "Problème lors de la suppression"
-                exit
-        fi
 fi
+
 if [ $1 = "edit" ]
 then
-	#shift
-	#HOSTNAME=$2
-	#echo $HOSTNAME
 	read -p "Quel hôte modifier ? " HOSTNAME
         checkExist
-	read -p "Quelle propriété modifier ?" OPTION
-	read -p "Quelle est sa nouvelle valeur" newValue
 
         if [ $exist -eq 0 ]
         then
@@ -122,9 +143,4 @@ then
                 exit
         fi
         edit
-        if [ $? -ne 0 ]
-        then
-                echo "Problème lors de la modification"
-                exit
-        fi
 fi
