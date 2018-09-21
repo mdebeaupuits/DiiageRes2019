@@ -1,0 +1,3 @@
+IP=192.168.102.140:Hostname=Gorgonzola:User=root:Auth=root:OS=Linux:Roles=DHCP:VLAN=55:Environement=Recette
+
+IP=192.168.102.140:Hostname=Brie:User=root:Auth=root:OS=Linux:Roles=DHCP:VLAN=34:Environement=Production
