@@ -4,7 +4,13 @@ fichier_conf=/root/Scripting/DiiageRes2019/rossi/DIIAGE3/manager/data.txt
 
 function verif_Doublon_Hostname()
 {
-	verify=$(awk /"HOSTNAME=$HOSTNAME/ {print}" $fichier_conf)
+	if [ -z "$HOSTNAME"  ]
+	then
+		echo "Veuillez saisir un nom d'hote"
+		exit
+	fi
+
+	verify=$(awk /"HOSTNAME=$HOSTNAME/ {print}" $fichier_conf) 
         if [ "x$verify" = "x" ]
         then
                 exist=0
