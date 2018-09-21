@@ -18,7 +18,17 @@ function checkExist(){
 	return $exist
 }
 #Fonction permettant de verifier si une IP existe deja
-function checkIP(){
+function checkDoubleIP(){
+        checkFormatIP=$(awk "/IP=$IP/ {print}" $config)
+        if [ "x$checkFormatIP" = "x" ]
+        then
+		echo "Cette adresse IP est déja renseignée"
+		exit
+        fi
+
+}	
+#Fonction verifiant le format de l'adresse IP puis test la connexion SSH	
+function checkFormatIP(){
 	regex='^(0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\.){3}'
 	regex+='0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))$'
 
@@ -35,19 +45,21 @@ function checkIP(){
     	fi
 }
 
-#Mettre des espaces pour affichage meilleur
 #fonction permettant d'ajouter un hote au fichier
 function add(){
 	local IP=$1 HOSTNAME=$2 COMPTE=$3 AUTH=$4 OS=$5 ROLE=$6 VLAN=$7 ENVIRONNEMENT=$8
 	echo "IP=$IP:Hostname=$HOSTNAME:Compte=$COMPTE:Auth=$AUTH:OS=$OS:Role=$ROLE:VLAN=$VLAN:Environnement=$ENVIRONNEMENT" >> $config 
 	return $?
 }
+
 #Fonction permettant de supprimer un hote du fichier
 function delete(){
 	sed -i"$config" "/Hostname=$HOST/d" $config
 	return $?
 }
+
 #Fonction permettant d'editer un hote du fichier
+#TODO : Modifier la fonction car porblème de substitution supprime beaucoup de champs de la ligne
 function edit(){
 	ligne=$(grep $HOSTNAME $config)
 	sed -i"$config" "s/$OPTION=.*:/$OPTION=$nvValeur:/g" $config
@@ -57,6 +69,7 @@ function edit(){
 
 #Declaration du fichier dans lequel on va stocker les postes
 config="data.txt"
+#Affichage de l'utilisation de la commande dans le cas où il manque un argument
 if [ $# -lt 1 ]
 then
 	echo "$0 [add|delete|edit] (-h hostname -i\"IP=@IP:Compte=root...\" "
@@ -64,6 +77,7 @@ then
 fi
 if [ $1 = "add" ]
 then
+	#Verification de l'existence du fichier de config
 	if [ ! -e $config ]
 	then
 		touch $config
@@ -78,7 +92,8 @@ then
         read -p "Compte : " COMPTE
         read -p "Authentification (saisir le mot de passe [mdp] ou si les clé SSH ont déja été echangées [cle]) : " AUTH
         read -p "IP : " IP
-	checkIP
+	checkDoubleIP
+	checkFormatIP
         read -p "OS : " OS
         read -p "Role : " ROLE
         read -p "VLAN : " VLAN
@@ -108,9 +123,6 @@ then
 fi
 if [ $1 = "edit" ]
 then
-	#shift
-	#HOSTNAME=$2
-	#echo $HOSTNAME
 	read -p "Quel hôte modifier ? " HOSTNAME
         checkExist
 	read -p "Quelle propriété modifier ?" OPTION
