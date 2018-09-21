@@ -1,57 +1,70 @@
 #!/bin/bash
-#manager.sh
-#Contient trois fonctions qui vont permettre d'ajouter, modifier et supprimer
-#des lignes dans un fichier plat
-
-#Ordre : Hote : IP : User : Password : VLAN : OS : Service : Role : Environement
+#manager
+#Permet d'ajouter, modifer et supprimer des lignes dans un fichier plat
 
 #Variables
-fic="data.txt";
+fic="data.txt"
+re="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
 
-#Fonction qui permet d'ajouter des lignes dans le fichier
+#Function qui permet l'ajout de ligne dans le fichier
 function add() {
-#       while read line
-#	do
-#		if [[ "$1" -eq "$line" ]]
-#		then
-#			echo "Ce nom d'hote exsite déjà !"
-#		else
-#			echo $1 >> ${fic}
-#		fi
-#	done < ${fic}
-	
-	echo $1 >> ${fic}
-	return 0
+	#echo $(awk -F, '{print $1}' ${fic})
+	if [[ $(awk "/$1/" ${fic}) ]]
+	#if [[ $(awk -F, '{print $1}' $1) -eq $(awk -F, '{print $1}' ${fic}) ]]
+	then
+		echo "L'hôte existe déjà !" $1
+		return 1
+	else
+		echo $1 >> ${fic}
+                return 0
+	fi
 }
 
-#Fonction qui modifie une ligne du fichier
+#Function qui permet la modification d'une ligne dans le fichier
 function mod() {
-	echo " ";
+	if [[ $(awk "/$1/" ${fic}) ]]
+	then
+                sed -i "s/^$1/^$2/g" ${fic}
+		return 0
+	else
+                echo "La ligne $1 n'existe pas dans le fichier !"
+                return 1
+	fi
 }
 
-#Fonction qui permet de supprimer une ligne dans le fichier
+#Function qui permet de supprimer une ligne dans le fichier
 function del() {
+        if [[ $(awk "/$1/" ${fic}) ]]
+        then
+                sed -i "/"$1"/d" ${fic}
+	        return 0
 
-	sed -i '/'$1'/d' ${fic}
-	return 0
+        else
+                echo "La ligne $1 n'existe pas dans le fichier !"
+                return 1
+        fi
 }
 
+#Function qui va envoyer le fichier plat via ssh sur une autre machine
+function send() {
+	echo "coucou"
+}
+
+#Vérification de l existance d un paramètre
 if [[ $# -ne 0 ]]
 then
-#	echo "Choisir la function : add | del | mod"
-#	read func
-	while getopts ":a:d:m:" func
+	#Options
+	while getopts ":a:m:d:" option
 	do
-		case ${func} in
+		case ${option} in
 			a) shift; add $1;;
-			d) shift; del $1;;
 			m) shift; mod $1;;
-			:) echo "L'option $OPTARG requiert un argument";;
-			*) echo "Option invalide !";;
+			d) shift; del $1;;
+			:) echo "Il faut un argument !";;
+			*) echo "Option invalide !"
 		esac
 	done
 else
-	echo "Saisir un paramètre !";
+	echo "Appel : ./manager.sh -a | -m | -d ARG"
+	echo "-m : ./manager.sh -m ARG ARG2"
 fi
-
-

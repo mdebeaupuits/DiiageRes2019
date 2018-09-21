@@ -14,6 +14,7 @@ function add (){
 		echo " the line already exists."
 		return 1
 	fi
+
 	echo "${ADD}" >> ${FIC}
 	
 	if [[ $? -eq 1 ]]
@@ -45,16 +46,52 @@ function modify (){
 	#sed -i "s/${MODIFY}/${VALUE}/g" ${FIC}
 
 }
+function check_ip (){
+                if [[ ${IP} =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]]
+                then
+                        awk "BEGIN  {i=1} /${IP}/ {i=0} END {exit i}" ${FIC};
+                        if [[ $? -eq 0 ]]
+                        then
+	                        echo "L'adresse ${IP} existe déjà !"
+                                exit 1
+                        fi
+                else
+	                echo "Il faut saisir une adresse IP."
+                        exit 1
+                fi	
+}
+function check_hostname (){
+	awk "BEGIN  {i=1} /${HOSTNAME}/ {i=0} END {exit i}" ${FIC};
+        if [[ $? -eq 0 ]]
+        then
+	        echo "${HOSTNAME} already exists in the file."
+		return 1
+	fi
+
+}
+function check_connectivity (){
+	ssh -o ConnectTimeout=10 ${ACCOUNT}@${IP}
+	if [[ $? -ne 0 ]]
+	then
+		echo "connexion problem, check the account, the password or the IP address specified"
+		return 1
+	fi	
+
+}
 case $CHOIX in
 	1)
 		echo "Give the IP address"
         	read IP
+		check_ip
         	echo "Give the hostname"
         	read HOSTNAME
+		check_hostname
         	echo "Give the user account"
         	read ACCOUNT
         	echo "Give the password to connect to the host"
         	read MDP
+		echo "testez de vous connecter à la machine pour vérifier le compte et le mdp"
+		check_connectivity
         	echo "Give the OS of the host"
         	read OS
         	echo "Give the role of the host"
@@ -80,6 +117,9 @@ case $CHOIX in
 		read DELETE
 		delete ${DELETE}
 		;;
+	*)	
+		echo "You have to enter a number between 1 and 3. Exit"
+		exit 1
 esac
 
 case $1 in
