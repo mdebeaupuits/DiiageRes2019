@@ -134,12 +134,27 @@ do
 			fi 
 			;;
 		U)
-
+#			echo -n "Saisir le nom du serveur à mettre à jour : " 
+#			read old_server
+#			check_mandatory $host $ip
+#			if [[ $? -eq 0 ]]
+#			then
+#				update_server $host $ip $user $password $role $os $vlan $environnement $old_server
+#			else 
+#				echo "Erreur : Vérifiez que le nom d'hôte et l'adresse IP ont bien été renseignés et sont valides" 
+#			fi 
 			;;
 		D)
-
+			check_mandatory $host $ip 
+			if [[ $? -eq 0 ]]
+			then 
+			remove_server $host
+			else
+				echo "Erreur : Vérifiez que le nom d'hôte et l'adresse IP ont bien été renseignés et sont valides" 
+			fi
 			;;
-		*)    
+		*)   
+		       aide	
 			;;
 	esac
 done
