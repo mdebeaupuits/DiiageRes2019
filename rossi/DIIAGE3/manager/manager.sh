@@ -14,17 +14,29 @@ function checkHostname()
 		exit
 	fi
 
-	verify=$(awk /"HOSTNAME=$HOSTNAME/ {print}" $confFile) 
+	verify=$(awk /"HOSTNAME=$HOSTNAME/ {print}" $confFile)
         if [ "x$verify" = "x" ]
         then
-                exist=0
+                existHostname=0
 	else
-		exist=1
+		existHostname=1
         fi
 }
 
-#Fonction permettant de verifier si une IP existe deja dans la liste
-function checkIP()
+#Fonction permettant de verifier si une IP existe deja
+function checkDoubleIP()
+{
+	verifyIP=$(awk "/IP=$IP/ {print}" $confFile)
+	if [ "x$verifyIP" = "x" ]
+	then
+		existIP=0
+	else
+		existIP=1
+	fi
+}
+
+#Fonction permettant de verifier si une IP a le bon format et connection ssh
+function checkIPFormat()
 {
 	re='^(0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\.){3}'
 	re+='0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))$'
@@ -32,6 +44,13 @@ function checkIP()
 	if ! [[ $IP =~ $re ]];
 	then
   		echo "Adresse IP INCORRECT"
+		exit
+	fi
+
+	ssh -o ConnectTimeout=5 $IP echo "" > /dev/null 2>&1
+	if [ $? -ne 0 ]
+	then
+		echo "L'hote est pas dispo "
 		exit
 	fi
 }
@@ -74,14 +93,21 @@ then
         read -p "HOSTNAME : " HOSTNAME
 	checkHostname
 
-	if [ $exist -eq 1 ]
+	if [ $existHostname -eq 1 ]
 	then
 		echo "Le nom d'hote existe deja"
 		exit
 	fi
 
 	read -p "IP : " IP
-	checkIP
+	checkIPFormat
+	checkDoubleIP
+
+	if [ $existIP -eq 1 ]
+        then
+                echo "L'adresse IP existe déjà"
+                exit
+        fi
 
         read -p "USER : " USER
         read -p "AUTH : " AUTH

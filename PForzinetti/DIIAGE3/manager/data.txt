@@ -1,9 +1,3 @@
-HOST=er:IP=rqeh:UTIL=rh:MDP=rh:OS=rehqrhe:ROLE=rhe:VLAN=rh:ENV=qzr
-HOST=qsreg:IP=qgsd:UTIL=qs:MDP=gqs:OS=ggqs:ROLE=rge:VLAN=e:ENV=qgs
-HOST=quhfbv:IP=qfdsb:UTIL=dfqb:MDP=dfqb:OS=dqfb:ROLE=qfbds:VLAN=dqfbbf:ENV=btyg
-HOST=jambon:IP=192.168.0.133:UTIL=user:MDP=root:OS=Linux:ROLE=WEB:VLAN=55:ENV=Production
-HOST=Brie:IP=1692.168.0.233:UTIL=root:MDP=root:OS=linux:ROLE=DNS:VLAN=2:ENV=Recette
-HOST=Gorgonzola:IP=0:UTIL=1:MDP=copy.sh:OS=data.txt:ROLE=liste.sh:VLAN=manager.sh:ENV=QFB
-HOST=carotte:IP=10.10.10.10:UTIL=root:MDP=root:OS=Linux:ROLE=AD:VLAN=3:ENV=Production
-HOST=Carotte:IP=10.10.10.10:UTIL=root:MDP=root:OS=Linux:ROLE=AD:VLAN=5:ENV=Production
-HOST=Tomate:IP=10.5.0.12:UTIL=root:MDP=root:OS=linux:ROLE=DHCP:VLAN=7:ENV=Production
+IP=192.168.102.140:Hostname=Gorgonzola:User=root:Auth=root:OS=Linux:Roles=DHCP:VLAN=55:Environement=Recette
+
+IP=192.168.102.140:Hostname=Brie:User=root:Auth=root:OS=Linux:Roles=DHCP:VLAN=34:Environement=Production
