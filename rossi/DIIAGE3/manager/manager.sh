@@ -63,9 +63,22 @@ function add()
 	echo "IP=$IP:Hostname=$HOSTNAME:Compte=$COMPTE:Auth=$AUTH:OS=$OS:Role=$ROLE:VLAN=$VLAN:Environnement=$ENVIRONNEMENT" >> $confFile
 }
 
+function edit () {
+	LIGNE=$(grep $HOSTNAME $confFile)
+	echo "Copier coller cette ligne puis modifier la : "
+	echo "$LIGNE"
+	read NEWVALUE
+        sed -i "s/$LIGNE/$NEWVALUE/g" $confFile
+        #Retour erreur
+        if [[ $? -ne 0 ]]
+        then
+                echo "Echec lors de la modification"
+                return $?
+        fi
+}
 
 #Fonction permettant de supprimer un hote de la liste
-#Pas de message d'erreur si on tente de supprimer un hôte n'existant pas
+#Pas de message d'erreur si on tente de supprimer un hôte nexistant pas
 function delete()
 {
 	sed -i "/$HOSTNAME/d" $confFile
@@ -122,7 +135,15 @@ fi
 #Si le param est modifier alors on appel la fonction modifier
 if [ $1 = "edit" ]
 then
-        edit
+	read -p "Quel hôte modifier ? " HOSTNAME
+        checkHostname
+
+        if [ $exist -eq 0 ]
+        then
+                echo "L'hote n'existe pas !"
+                exit
+        fi
+	edit
 fi
 
 
