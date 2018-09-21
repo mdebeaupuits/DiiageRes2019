@@ -1,1 +1,2 @@
-hostname=debian:ip=10.10.10.10:user=admin:mdp=admin:os=win:role=web
+IP=1.1.1.1:Hostname=debian1:User=root:Auth=root:OS=debian:Role=web:VLAN=5:Environnement=linux
+IP=2.2.2.2:Hostname=redhat:User=admin:Auth=admin:OS=redhat:Role=web:VLAN=4:Environnement=linux
