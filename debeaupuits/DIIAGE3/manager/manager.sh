@@ -1,4 +1,5 @@
 #!/bin/bash
+#set -xv
 send_configfile () {
 	local source_path=$1
 	local dest_path=$2
@@ -54,11 +55,8 @@ update_server () {
 }
 
 aide () {
-	echo "Usage : $0 -A|U|D -h hostname -i IP [-uprove]"
+	echo "Usage : $0 -h hostname -i IP [-uprove] -A|U|D "
 	echo "Dépendances : OpenSSH, telnet" 
-	echo "-A : Ajouter un hôte"
-	echo "-U : Mettre à jour un hôte"
-	echo "-D : Supprimer un hôte"
 	echo "-h : Nom de l'hôte"
 	echo "-i : Adresse IP"
 	echo "-u : Nom d'utilisateur"
@@ -66,27 +64,33 @@ aide () {
 	echo "-r : Rôle de la machine"
 	echo "-v : VLAN"
 	echo "-e : Environnement" 
+	echo "-A : Ajouter un hôte"
+	echo "-U : Mettre à jour un hôte"
+	echo "-D : Supprimer un hôte"
 	return $?
 }
 
 check_mandatory () {
-if [[ -z $1 ]]
+ip_regex="^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"	
+if [[ -z $1 && -z $2 ]]
 then
 	return 1
-elif [[ -z $2 ]]
-then
-	return 2
 else
-	return 0
+	if [[ $2 =~ $ip_regex ]]
+	then     	
+		return 0
+	else
+	  return 1 
+  fi
 fi
 }
-# Test des fonctions 
+# function test  
 #add_server testserver320 192.168.0.1 admin pass dhcp Linux 21 production
 #remove_server testserver2 
 #update_server testserver32 10.5.0.51 admin pass dhcp Linux 21 production testserver320
 
 ############################
-# Debut de script
+# start of script
 ############################
 
 if [[ $# = 0 ]] 
@@ -94,7 +98,7 @@ then
 	aide
 	exit 0 
 fi
-while getopts "A:U:D:h:i:u:p:r:o:v:e" opt
+while getopts "h:i:u:p:r:o:v:eAUD" opt
 do
 	case "${opt}" in
 		h)
@@ -126,7 +130,7 @@ do
 			then
 				add_server $host $ip $user $password $role $os $vlan $environnement
 			else 
-				echo "Erreur : Vérifiez que le nom d'hôte et l'adresse IP ont bien été renseignés" 
+				echo "Erreur : Vérifiez que le nom d'hôte et l'adresse IP ont bien été renseignés et sont valides" 
 			fi 
 			;;
 		U)

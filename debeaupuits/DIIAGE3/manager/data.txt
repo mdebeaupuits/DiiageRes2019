@@ -3,3 +3,5 @@ testserver3:192.168.0.1:admin:pass:dhcp::21:production
 testserver35:192.168.0.1:admin:pass:dhcp::21:production
 testserver4:10.5.0.51:admin:pass:dhcp::21:production
 testserver32:10.5.0.51:admin:pass:dhcp::21:production
+test:10.5.0.3::::::
+test211:10.5.0.35::::::
