@@ -1,7 +1,7 @@
 #!/bin/bash
-FileName="data.txt"
+FileName="/root/DiiageRes2019/cazelles/DIIAGE3/manager/data.txt"
 function CheckHost() {
-	NbrHost=$(awk '/HOST='$1':IP='$2'/{x+=1}END{print x}' $FileName)
+	NbrHost=$(awk '/Hostname='$Host'/{x+=1}END{print x}' $FileName)
 	if [ $NbrHost > 0 ]
 	then
 		exist="1"
@@ -15,7 +15,7 @@ function ReadHost() {
 	#Interaction utilisateur
 	echo "Nom d'hote"
 	read Host
-	CheckHost $Host
+	CheckHost
 		if [ $exist = "0" ]
 		then
 			echo "Adresse IP"
@@ -32,7 +32,7 @@ function ReadHost() {
 			read Vlan
 			echo "Environnement (Production / Recette / Developpement)"
 			read Env
-			AddFile $Host $Ip $Login $Password $Os $Role $Vlan $Env 
+			AddFile
 		else
 		echo "Le serveur existe déja"
 	
@@ -42,8 +42,8 @@ function ReadHost() {
 
 ##Permet d'ajouter un fichier
 function AddFile() {
-	CheckVar $1
-	CheckVar $2
+	CheckVar $Host
+	CheckVar $Ip
 
 	#TestSSH $2 $3
 	
@@ -52,19 +52,19 @@ function AddFile() {
 	then
 		echo "Une variable est vide"
 	else
-		CheckIP $2
+		CheckIP $Ip
 		if [ $varip = 1 ]
 			then
 				echo "Ce n'est pas une adresse IP"
 			else
-				echo "HOST=$1:IP=$2:UTIL=$3:MDP=$4:OS=$5:ROLE=$6:VLAN=$7:ENV=$8" >> $FileName
+				echo "IP=$Ip:Hostname=$Host:User=$Login:Auth=$Password:OS=$Os:Role=$Role:VLAN=$Vlan:Environnement=$Env" >> $FileName
 		fi
 	fi
 }
 
-##Permet de savoir si le paramètre Nom est saisi
+##Permet de savoir si le paramètre Host est saisi
 function CheckVar() {
-	if [ -z "$1" ];
+	if [ -z "$Host" ];
 	then
 		varvide="1"
 	else
@@ -74,7 +74,7 @@ function CheckVar() {
 
 ##Fonction aidant a supprimer une entrée par rapport au nom
 function DeleteFile() {
-	sed -i "/HOST=$Hostname/d" $FileName
+	sed -i "/Hostname=$Hostname/d" $FileName
 }
 
 #function TestSSH()
@@ -85,9 +85,9 @@ function DeleteFile() {
 
 function CheckIP()
 {
-	echo $1
+	echo $Ip
     # Return true if $1 is a valid IP
-    if [[ $1 =~ ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$ ]]
+    if [[ $Ip =~ ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$ ]]
 	then
 		varip="0"
 	else
@@ -104,7 +104,8 @@ fi
 
 if [ $1 = "del" ] 
 then
-read Hostname
+#Pas de demande à l'utilisateur
+read -p "Saisir le nom de la machine à supprimer:" Hostname
 DeleteFile 
 fi 
 

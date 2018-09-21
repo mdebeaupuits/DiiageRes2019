@@ -1,1 +1,0 @@
-IP=10.5.0.46 : hostname=mint : user=root : mdp=root : os=ubuntu
