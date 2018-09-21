@@ -17,9 +17,9 @@ function checkHostname()
 	verify=$(awk /"HOSTNAME=$HOSTNAME/ {print}" $confFile)
         if [ "x$verify" = "x" ]
         then
-                exist=0
+                existHostname=0
 	else
-		exist=1
+		existHostname=1
         fi
 }
 
@@ -93,7 +93,7 @@ then
         read -p "HOSTNAME : " HOSTNAME
 	checkHostname
 
-	if [ $exist -eq 1 ]
+	if [ $existHostname -eq 1 ]
 	then
 		echo "Le nom d'hote existe deja"
 		exit
@@ -102,12 +102,12 @@ then
 	read -p "IP : " IP
 	checkIPFormat
 	checkDoubleIP
+
 	if [ $existIP -eq 1 ]
         then
                 echo "L'adresse IP existe déjà"
                 exit
         fi
-
 
         read -p "USER : " USER
         read -p "AUTH : " AUTH
