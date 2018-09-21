@@ -103,6 +103,7 @@ then
                 exit
         fi
 fi
+
 if [ $1 = "modifier" ]
 then
 	#shift
