@@ -10,7 +10,7 @@ function ajout_entree() {
 	local Vlan=$7
 	local Env=$8
 	confFile=$9
-	#uniqHost=$(awk '/'$Hostname'/{x+1}END{print x}' $confFile
+	uniqHost=$(awk '/'$Hostname'/{x+1}END{print x}' $confFile
 	echo $Hostname:$Ip:$User:$Pw:$Os:$Role:$Vlan:$Env  >> $confFile
 	return $?
 }

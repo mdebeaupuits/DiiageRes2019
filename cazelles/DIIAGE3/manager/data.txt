@@ -2,3 +2,4 @@ IP=er:Hostname=er:User=er:Password=er:OS=er:Distrib=er:Role=er:VLAN=er:Env=er;
 IP=test:Hostname=test:User=test:Password=test:OS=test:Distrib=test:Role=test:VLAN=test:Env=test
 IP=1010:Hostname=srvintra:User=root:Password=root:OS=oot:Distrib=ota:Role=ada:VLAN=ze:Env=fe
 IP=10.5.0.69:Hostname=DebCaz:User=root:Password=root:OS=Linux:Distrib=Debian9:Role=Configuration:VLAN=salleRes:Env=dev
+IP=a:Hostname=test1:User=dqs:Password=qsd:OS=qsd:Distrib=qsd:Role=qs:VLAN=qsd:Env=qsd
