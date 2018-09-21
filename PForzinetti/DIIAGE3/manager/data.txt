@@ -1,6 +1,0 @@
-HOST=er:IP=rqeh:UTIL=rh:MDP=rh:OS=rehqrhe:ROLE=rhe:VLAN=rh:ENV=qzr
-HOST=qsreg:IP=qgsd:UTIL=qs:MDP=gqs:OS=ggqs:ROLE=rge:VLAN=e:ENV=qgs
-HOST=quhfbv:IP=qfdsb:UTIL=dfqb:MDP=dfqb:OS=dqfb:ROLE=qfbds:VLAN=dqfbbf:ENV=btyg
-HOST=jambon:IP=192.168.0.133:UTIL=user:MDP=root:OS=Linux:ROLE=WEB:VLAN=55:ENV=Production
-HOST=Brie:IP=1692.168.0.233:UTIL=root:MDP=root:OS=linux:ROLE=DNS:VLAN=2:ENV=Recette
-HOST=Gorgonzola:IP=0:UTIL=1:MDP=copy.sh:OS=data.txt:ROLE=liste.sh:VLAN=manager.sh:ENV=QFB
