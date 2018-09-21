@@ -18,8 +18,8 @@ function verif_ip () {
 function ssh_timeout () {
                 ssh -o ConnectTimeout=10 ${user}@${ip}
                 if [[ $? -gt 1 ]]; then
-                echo "fail, erreur dans l'adresse IP ou port non ouvert ?"
-                exit
+                	echo "fail, erreur dans l'adresse IP ou port non ouvert ?"
+                	exit
                 fi
 }
 
