@@ -3,3 +3,4 @@ IP=dzrae : HOSTNAME=TEST2 : USER=ezrt : PASSWORD=z: OS=zf : ROLE=ezf : ENVIRONNE
 IP=TEST4 : HOSTNAME=TEST4 : USER=TEST4 : PASSWORD=TEST4: OS=TEST4 : ROLE=TEST4 : ENVIRONNEMENT=TEST4 : VLAN=TEST4
 IP=10.5.0.26 : HOSTNAME=TEST3 : USER=root : PASSWORD=root: OS=Debian : ROLE=WEB : ENVIRONNEMENT=PROD : VLAN=1
 IP=10.5.26.5:Hostname=TEST6:Compte=:Auth=:OS=root:Role=root:VLAN=toor:Environnement=root
+IP=10.56.9.2:Hostname=TEJ:Compte=:Auth=root:OS=root:Role=root:VLAN=root:Environnement=root
