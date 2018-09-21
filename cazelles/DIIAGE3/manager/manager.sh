@@ -17,12 +17,18 @@ fi
 if [ $1 = "add" ]
 then
 	read -p "@ IP:" ip
+	if ! [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]];
+	then
+		echo "Entrez une adresse IPV4"
+		exit
+	fi
 	read -p "Hostname:" host
-#	check=$(cat $txt | grep "/Hostname=$host/")
-#       if [ "t$check" != "t" ]
-#        then
-#		exit
-#	fi
+	check=$(cat $txt | grep "Hostname=$host")
+        if [[ "t$check" != "t" || $host = "" ]];
+        then
+		echo "Le serveur est déjà présent dans le fichier ou vous n'avez pas entré de nom"
+		exit
+	fi
 	read -p "User:" user
 	read -p "Password:" password
 	read -p "OS:" os

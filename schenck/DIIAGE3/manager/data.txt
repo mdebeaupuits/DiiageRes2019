@@ -1,1 +1,5 @@
 srv-web:192.168.2.1:root:root:GNU/Linux:web:5:prod
+:::::::
+:::::::
+:::::::
+docker:10.5.10.87:root:root:GNU/Linux:docker:5:prod

@@ -1,4 +1,10 @@
+#!/bin/bash
 function verifExist(){
+	if [ -z $HOSTNAME ]
+	then
+		echo "Entrez un hostname !"
+		exit
+	fi
 	verifHostname=$(awk "/Hostname=$HOSTNAME/ {print}" $config)
 	if [ "x$verifHostname" != "x" ]
         then
@@ -7,6 +13,27 @@ function verifExist(){
 		exist=0
 	fi
 	return $exist
+	
+}
+function verifIP(){
+	regex='^(0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\.){3}'
+	regex+='0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))$'
+
+	if ! [[ $IP =~ $regex ]]; then
+		echo "Mauvaise format d'adresse ip ! "
+		exit
+	fi
+
+	#if [ $AUTH != "cle" ]
+	#then
+	#	nohup "ssh-copy-id root@$IP -o \"ConnectTimeout 2\" "
+	#fi
+	#testHostname=$(nohup "ssh root@$IP \"hostname\" -o \"ConnectTimeout 2\"")
+	#if [ -z $testHostname ]
+	#then
+	#	echo "La connexion SSH a échoué"
+	#	exit
+	#fi
 	
 }
 function ajout(){
@@ -20,7 +47,7 @@ function supprimer(){
 }
 function modifier(){
 	ligne=$(grep $HOSTNAME $config)
-	echo "sed -i\"$config\" \"s/$OPTION=*/$OPTION=$nvValeur/g\""
+	sed -i"$config" "s/$OPTION=.*:/$OPTION=$nvValeur:/g" $config
 	return $?
 }
 
@@ -45,9 +72,10 @@ then
 		echo "Il existe déja un hôte avec ce nom"
 		exit
 	fi
-        read -p "IP : " IP
         read -p "Compte : " COMPTE
-        read -p "Authentification : " AUTH
+        read -p "Authentification (saisir le mot de passe [mdp] ou si les clé SSH ont déja été echangées [cle]) : " AUTH
+        read -p "IP : " IP
+	verifIP
         read -p "OS : " OS
         read -p "Role : " ROLE
         read -p "VLAN : " VLAN
