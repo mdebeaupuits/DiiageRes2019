@@ -7,7 +7,13 @@ echo "Que souhaitez vous faire ? (Ajouter un hote(1), modifier un hote (2) ou su
 read choice
 
 function add () {
-	echo "$host"":""$ip"":""$distribution"":""$os"":""$user"":""$envi" >> ${basemachine}
+	awk "BEGIN  {i=1} /${ADD}/ {i=0} END {exit i}" ${basemachine};
+	if [[ $? -eq 0 ]]
+	then
+		echo "La machine est deja presente dans la base"
+		return 1
+	fi
+	echo "${ADD}" >> ${basemachine}
 
 	#Retour erreur
 	if [[ $? -eq 0 ]]
@@ -57,6 +63,7 @@ case $choice in
         	read user
         	echo "Environnement de la machine (prod, recette, developpement) ?"
         	read envi
+		ADD="$host"":""$ip"":""$distribution"":""$os"":""$user"":""$envi"
 		add
 		;;
 	2)
