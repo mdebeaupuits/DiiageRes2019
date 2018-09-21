@@ -22,11 +22,10 @@ function verif_ip () {
 
 function ssh_timeout () {
                 ssh -o ConnectTimeout=10 ${user}@${ip}
-                if [[ $? -gt 1 ]]; then
-                echo "Fail, an error occured because a wrong IP address or a wrong port was specified"
-                return 1
-                	echo "fail, erreur dans l'adresse IP ou port non ouvert ?"
-                	exit
+                if [[ $? -gt 1 ]]; 
+		then
+                	echo "Fail, an error occured because a wrong IP address or a wrong port was specified"
+                	return 1
                 fi
 }
 
