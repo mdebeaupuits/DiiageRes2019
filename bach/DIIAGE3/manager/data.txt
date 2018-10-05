@@ -1,2 +1,9 @@
 IP=10.5.0.57:HOSTNAME=clementbey:ACCOUNT=root:MDP=root:OS=debian:ROLE=web:ENVIRONNEMENT=developpement
 IP=10.5.0.35:Hostname=DebianKB:User=root:Auth=password:OS=GNU Debian:Role=Puppet:VLAN=1:Environnement=Production
+testkb
+blabla
+aaaaaaaaa
+aaadfsgthnj
+aaagqerhq
+aaagqehhjk
+IP=:Hostname=bash:User=root:Auth=Password:OS=Debian:Role=Web:VLAN=1:Environnement=Production

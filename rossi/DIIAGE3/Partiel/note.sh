@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#Script permettant à lutilisateur de saisir une note et d'afficher un message en fonction de celle ci
+
 #Test parameters =0
 if [ $# -eq 0 ]
 then

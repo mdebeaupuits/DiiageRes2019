@@ -1,2 +1,4 @@
 IP=1.1.1.1:Hostname=debian1:User=root:Auth=root:OS=debian:Role=web:VLAN=5:Environnement=linux
 IP=2.2.2.2:Hostname=redhat:User=admin:Auth=admin:OS=redhat:Role=web:VLAN=4:Environnement=linux
+IP=20.20.21.21:Hostname=padc:User=admin:Auth=admin:OS=win:Role=srv:VLAN=9:Environnement=windows
+IP=20.20.21.21:Hostname=padc:User=admin:Auth=admin:OS=win:Role=srv:VLAN=9:Environnement=windows
