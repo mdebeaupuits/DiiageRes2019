@@ -8,7 +8,8 @@ then
 	note=$1
 fi
 
-while [  "$note" -gt 10 ]; do
+while [[  "$note" -gt 10 || "$note" -lt 0 ]]; do
+	echo "[Error] Your score is not in the range 0 to 10"
 	read -p "What is your score ? " note
 done
 if [ "$note" -ge 9 ]; then 
