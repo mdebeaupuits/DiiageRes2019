@@ -14,6 +14,16 @@ function remove(){
 	return $?
 }
 
+function edit() {
+	read -p "Quelle machine modifier" hostedit
+        value=$(grep $hostedit $txt)
+        echo "Enregistrement actuel : $value"
+	echo "Saisir le nouvel enregistrement :"
+        read newvalue
+        sed -i "s/$value/$newvalue/g" $txt
+        return $?
+}
+
 #Test de la connection  SSH 
 function testSsh(){
 	hostnameSsh=$(ssh -o ConnectTimeout=5 $user@$ip "hostname")
@@ -74,9 +84,5 @@ fi
 
 if [ $1 = "edit" ]
 then
-	read -p "Quelle machine modifier" hostedit
-	#MODIFY=$(grep "${HOST}" ${FIC} | awk -F ":" '{ print $2 }' | cut -d "=" -f2)
-	#cat ${FIC} | awk -F ":" '/${HOST}/ { print $2}' | cut -d "=" -f2 |sed -i
-	#sed -i "s/${MODIFY}/${VALUE}/g" ${FIC}
-#sed -i "s/${MODIFY}/${VALUE}/g" ${FIC}
+	edit
 fi
