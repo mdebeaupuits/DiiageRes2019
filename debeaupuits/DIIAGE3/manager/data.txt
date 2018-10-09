@@ -1,5 +1,4 @@
-testserver2:192.168.0.1:admin:pass:dhcp::21:production
-testserver3:192.168.0.1:admin:pass:dhcp::21:production
-testserver35:192.168.0.1:admin:pass:dhcp::21:production
-testserver4:10.5.0.51:admin:pass:dhcp::21:production
-testserver32:10.5.0.51:admin:pass:dhcp::21:production
+test215:10.5.0.35::::::
+test25:10.5.0.35::::::
+test255:10.5.0.35::::::
+test245:10.5.0.35::::::

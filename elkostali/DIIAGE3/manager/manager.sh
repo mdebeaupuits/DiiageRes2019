@@ -57,7 +57,7 @@ function add(){
 
 #Fonction permettant de supprimer un hote du fichier
 function delete(){
-	sed -i"$config" "/Hostname=$HOST/d" $config
+	sed -i"$config" "/Hostname=$HOSTNAME/d" $config
         if [[ $? -ne 0 ]]
         then
                 echo "Echec lors de la suppression"
@@ -122,7 +122,7 @@ fi
 
 if [ $1 = "delete" ]
 then
-	read -p "Quel hôte supprimer ? " HOST
+	read -p "Quel hôte supprimer ? " HOSTNAME
         checkExist
         if [ $exist -eq 0 ]
         then
