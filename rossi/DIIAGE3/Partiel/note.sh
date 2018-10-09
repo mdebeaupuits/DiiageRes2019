@@ -20,27 +20,31 @@ do
 	read -r note
 done
 
-#If note >9
+#Test if $note >=9
 	if [ $note -ge 9 ]
 	then
 		echo "Perfect"
 	fi
 
+#Test if $note >=7
 	if [ $note -ge 7 ]
 	then
 		echo "Good"
 	fi
 
+#Test if $note >=5
 	if [ $note -ge 5 ]
 	then
 		echo "Not bad"
 	fi
 
+#Test if $note >=2 : Je n'arrive pas a mettre la decimale
 	if [ $note -ge 2 ]
 	then
 		echo "Not good"
 	fi
 
+#Test if $note <2 : Je n'arrive pas a mettre la decimale
 	if [ $note -lt 2 ]
 	then
 		echo "Bad"
