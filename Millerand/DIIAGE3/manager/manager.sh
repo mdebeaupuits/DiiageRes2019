@@ -1,7 +1,7 @@
 #!/bin/bash
-FileName="data.txt"
-function CheckFile() {
-	NbrHost=$(awk '/HOST='$1'/{x+=1}END{print x}' $FileName)
+FileName="/root/DiiageRes2019/cazelles/DIIAGE3/manager/data.txt"
+function CheckHost() {
+	NbrHost=$(awk '/Hostname='$Host'/{x+=1}END{print x}' $FileName)
 	if [ $NbrHost > 0 ]
 	then
 		exist="1"
@@ -9,49 +9,62 @@ function CheckFile() {
 		exist="0"
 	fi
 }
+
+
 function ReadHost() {
 	#Interaction utilisateur
 	echo "Nom d'hote"
 	read Host
-	CheckFile $Host
-	if [ $exist = "0" ]
-	then
-		echo "Adresse IP"
-		read Ip
-		echo "Compte utilisateur a utiliser"
-		read Login
-		echo "Mot de passe du compte"
-		read Password
-		echo "OS"
-		read Os
-		echo "Role de ce serveur"
-		read Role
-		echo "Vlan"
-		read Vlan
-		echo "Environnement (Production / Recette / Developpement)"
-		read Env
-		AddFile $Host $Ip $Login $Password $Os $Role $Vlan $Env 
-	else
+	CheckHost
+		if [ $exist = "0" ]
+		then
+			echo "Adresse IP"
+			read Ip
+			echo "Compte utilisateur a utiliser"
+			read Login
+			echo "Mot de passe du compte"
+			read Password
+			echo "OS"
+			read Os
+			echo "Role de ce serveur"
+			read Role
+			echo "Vlan"
+			read Vlan
+			echo "Environnement (Production / Recette / Developpement)"
+			read Env
+			AddFile
+		else
 		echo "Le serveur existe déja"
-	fi
+	
+		fi
+
 }
 
 ##Permet d'ajouter un fichier
 function AddFile() {
-	CheckVar $1
-	CheckVar $2
+	CheckVar $Host
+	CheckVar $Ip
+
+	#TestSSH $2 $3
+	
 	#Ajout dans le fichier
 	if [ $varvide = 1 ]
 	then
 		echo "Une variable est vide"
 	else
-		echo "HOST=$1:IP=$2:UTIL=$3:MDP=$4:OS=$5:ROLE=$6:VLAN=$7:ENV=$8" >> $FileName
+		CheckIP $Ip
+		if [ $varip = 1 ]
+			then
+				echo "Ce n'est pas une adresse IP"
+			else
+				echo "IP=$Ip:Hostname=$Host:User=$Login:Auth=$Password:OS=$Os:Role=$Role:VLAN=$Vlan:Environnement=$Env" >> $FileName
+		fi
 	fi
 }
 
-##Permet de savoir si le paramètre Nom est saisi
+##Permet de savoir si le paramètre Host est saisi
 function CheckVar() {
-	if [ -z "$1" ];
+	if [ -z "$Host" ];
 	then
 		varvide="1"
 	else
@@ -61,8 +74,27 @@ function CheckVar() {
 
 ##Fonction aidant a supprimer une entrée par rapport au nom
 function DeleteFile() {
-	sed -i "/HOST=$Hostname/d" $FileName
+	sed -i "/Hostname=$Hostname/d" $FileName
 }
+
+#function TestSSH()
+#	{
+#		ssh $2@$1
+#		return $?
+#	}
+
+function CheckIP()
+{
+	echo $Ip
+    # Return true if $1 is a valid IP
+    if [[ $Ip =~ ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$ ]]
+	then
+		varip="0"
+	else
+		varip="1"
+	fi
+}
+
 
 ##Permet de selectionner les options
 if [ $1 = "add" ] 
@@ -72,7 +104,8 @@ fi
 
 if [ $1 = "del" ] 
 then
-read Hostname
+#Pas de demande à l'utilisateur
+read -p "Saisir le nom de la machine à supprimer:" Hostname
 DeleteFile 
 fi 
 
@@ -81,3 +114,6 @@ if [ $1 = "edit" ]
 then
 FunModifier 
 fi
+
+
+   

@@ -1,2 +1,6 @@
-IP=10.5.0.79:Environnement=PROD
-IP=10.5.0.79:Environnement=prod
+IP=10.5.0.21:Hostname=SAMY-serveur-ansible:Compte=root:Auth=cle:OS=Debian:Role=Web:VLAN=1:Environnement=PROD
+
+IP=10.5.0.21:Hostname=TEST2:Compte=root:Auth=cle:OS=Debian:Role=Web:VLAN=1:Environnement=PREPROD
+IP=10.5.0.21:Hostname=TEST3:Compte=root:Auth=cle:OS=Debian:Role=Web:VLAN=1:Environnement=PROD
+IP=10.5.0.21:Hostname=TEST4:Compte=root:Auth=cle:OS=Debian:Role=Web:VLAN=1:Environnement=PROD
+

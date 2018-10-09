@@ -1,51 +1,58 @@
 #!/bin/bash
-
-function add()
+function add()						#Add object in data.txt
 {
-	echo "hostname="$1":ip="$2":user="$3":mdp="$4":os="$5":role="$6>>data.txt
+        regex='^(0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))\.){3}'	#Verify IP address syntax
+        regex+='0*(1?[0-9]{1,2}|2([0-4][0-9]|5[0-5]))$'
+
+        if ! [[ $IP =~ $regex ]]; then
+                echo "IP address error"
+                exit
+        fi
+	echo "IP="$1":Hostname="$2":User="$3":Auth="$4":OS="$5":Role="$6":VLAN="$7":Environnement="$8"">>data.txt
 }
 
-function del()
+function del()						#Delete object in data.txt
 {
-	sed -i "/$hostname/d" data.txt
-}
-
-function mod()
-{
-	data=$(awk /"$1"/ data.txt | awk -F":" '{print $1}')
-	echo "data" $data
-	echo "2" $2
-	echo "3" $3
-	sed -i 's/"$data"/"$2"="$3"/g' data.txt
+	sed -i "/$1/d" data.txt
 }
 
 echo "Enter add, del or mod" ; read choose
 
-if [ $choose = "add" ]
+if [ "$choose" = "add" ]
 then
-	echo "type hostname, ip, user, mdp, os, role"
-	read hostname ip user mdp os role
+	echo "type ip, hostname, user, auth, os, role, vlan, environnement"
+	read ip hostname user auth os role vlan environnement
 	search=$(awk /"$hostname"/ data.txt)
-	if [ "x$search" != "x" ]
+
+	if [ -z "$hostname" ]				#Test if string is empty
+	then
+		echo "empty anwser"
+	elif [ "x$search" != "x" ]			#Test if hostame=$hostname is found in data.txt
 	then
 		echo "hostname exist"
 	else
-		add $hostname $ip $user $mdp $os $role
+		add $ip $hostname $user $auth $os $role $vlan $environnement
 	fi
-elif [ $choose = "del" ]
+elif [ "$choose" = "del" ]
 then
+	echo "type hostname to delete"
 	read hostname
 	del $hostname
-	echo "type hostname"
-elif [ $choose = "mod" ]
+elif [ "$choose" = "mod" ]
 then
 	cat data.txt
-	echo "type hostname type and value"
-	read host typ value
-	mod $host $typ $value
-else
-	echo "Ajouter,supprimer ou modifier n a pas ete entré"
+	echo "Type hostname to modify"			#Line choose with hostname
+	read name
+	del $name
+	echo "type ip, hostname, user, auth, os, role, vlan, environnement"
+	read ip hostname user auth os role vlan environnement
+	search=$(awk /"$hostname"/ data.txt)
+	if [ -z "$hostname2" ]				#Test if string is empty
+	then
+		echo "empty anwser"
+	else
+		add $ip $hostname $user $auth $os $role $vlan $environnement
+	fi
 fi
 
-echo "contenu du fichier fic : "
-cat data.txt
+echo "contenu du fichier Data.txt : " ; cat data.txt		#Show data.txt content
