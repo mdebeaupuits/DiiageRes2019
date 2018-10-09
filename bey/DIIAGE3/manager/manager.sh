@@ -160,6 +160,4 @@ then
 		*)
 			echo "Erreur de choix"
 	esac
-
-else
-	if [[
+fi
