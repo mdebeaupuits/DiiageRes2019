@@ -32,3 +32,16 @@ function ReadNote() {
 
 ReadNote
 
+#Bonus:
+
+if [[ -z $1 ]]
+then
+	echo "Insert something please"
+else
+	while [[ $# -ne 0 ]]
+	do
+		ReadNote $1
+		shift
+	done
+fi
+
