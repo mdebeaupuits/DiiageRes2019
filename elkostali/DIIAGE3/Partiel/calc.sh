@@ -9,4 +9,3 @@ operation=$2
 second=$3
 result=$(( $first $operation $second))
 echo "$first $operation $second = $result"
-
