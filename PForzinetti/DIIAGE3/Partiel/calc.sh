@@ -4,6 +4,7 @@
 #calc.sh
 #Description  : Ce script permet de realiser des calculs simples
 
+
 if [ -z $1 ] 
 then
 	echo "[Error] Please give me something to do !"

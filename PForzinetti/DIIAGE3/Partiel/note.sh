@@ -5,6 +5,7 @@
 #note.sh
 #Description  : Afficher un message en fonction de la note obtenue
 
+
 note="42"
 pass="0"
 #i=

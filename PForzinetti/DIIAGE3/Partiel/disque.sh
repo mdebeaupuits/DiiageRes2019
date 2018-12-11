@@ -7,3 +7,4 @@
 
 fdisk -l | grep -i disk
 
+
